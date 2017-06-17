@@ -5,10 +5,7 @@ class ZipCode extends React.Component {
     this.initialState = {
       inputValue: '',
       zipCode: null,
-      city: null,
-      temp: null,
-      timeZone: null,
-      elevation: null,
+      data: null,
       error: null
     }
 
@@ -49,7 +46,7 @@ class ZipCode extends React.Component {
     })
     .then((json) => {
       if(json) {
-        this.setState(json)
+        this.setState({data: json})
       }
     })
     .catch((error) => {
@@ -59,11 +56,7 @@ class ZipCode extends React.Component {
 
   render() {
     const {
-      zipCode,
-      city,
-      temp,
-      timeZone,
-      elevation,
+      data,
       error
     } = this.state
 
@@ -83,8 +76,8 @@ class ZipCode extends React.Component {
         { error ?
           <h3>{error}</h3>
         : null}
-        { city && temp && timeZone && elevation ?
-          <p>{`Zip code ${zipCode} is located in ${city}, at an elevation of ${elevation}, in time zone ${timeZone}. It is currently ${temp} degrees.`}</p>
+        { data ?
+          <p>{`Zip code ${data.zipCode} is located in ${data.city}, at an elevation of ${data.elevation} feet. The time zone is ${data.timeZone}. It is currently ${data.temp} degrees.`}</p>
         : null}
       </div>
     )
