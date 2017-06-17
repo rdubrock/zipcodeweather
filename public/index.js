@@ -41,11 +41,16 @@ class ZipCode extends React.Component {
       if(response.status < 400) {
         return response.json()
       } else {
+        response.text().then((error) => {
+          console.log(error)
+        })
         throw new Error('There was a problem getting your data')
       }
     })
     .then((json) => {
-      this.setState(json)
+      if(json) {
+        this.setState(json)
+      }
     })
     .catch((error) => {
       this.setState({error: error.message || error})

@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.15.3",
+    "isomorphic-fetch": "^2.2.1",
     "react": "^15.6.1"
   },
   "devDependencies": {},
