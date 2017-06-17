@@ -83,6 +83,9 @@ class ZipCode extends React.Component {
         { error ?
           <h3>{error}</h3>
         : null}
+        { city && temp && timeZone && elevation ?
+          <p>{`Zip code ${zipCode} is located in ${city}, at an elevation of ${elevation}, in time zone ${timeZone}. It is currently ${temp} degrees.`}</p>
+        : null}
       </div>
     )
   }

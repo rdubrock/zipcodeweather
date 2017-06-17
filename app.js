@@ -28,8 +28,8 @@ const openWeatherMap = (zipCode) => {
 }
 
 const googleTimeZone = (data) => {
-  const apiKey = 'AIzaSyBff2hxbYKHsG5inVuFBr_MhVlOAlT_1Rc'
-  let requestUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${data.lat},${data.lon}&key=${apiKey}`
+  const apiKey = 'AIzaSyBoYus7GoL0yPOdrccpAloVHlDkJ2go2ro'
+  let requestUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${data.lat},${data.lon}&timestamp=${Date.now()/1000}&key=${apiKey}`
 
   return fetch(requestUrl)
   .then((response) => {
@@ -40,8 +40,24 @@ const googleTimeZone = (data) => {
     }
   })
   .then((json) => {
-    console.log(json)
     data.timeZone = json.timeZoneName
+    return data
+  })
+}
+
+const googleElevation = (data) => {
+  const apiKey = 'AIzaSyBoYus7GoL0yPOdrccpAloVHlDkJ2go2ro'
+  let requestUrl = `https://maps.googleapis.com/maps/api/elevation/json?locations=${data.lat},${data.lon}&key=${apiKey}`
+  return fetch(requestUrl)
+  .then((response) => {
+    if(response.status < 400) {
+      return response.json()
+    } else {
+      throw new Error('Could not get elevation')
+    }
+  })
+  .then((json) => {
+    data.elevation = json.results[0].elevation
     return data
   })
 }
@@ -62,12 +78,11 @@ app.get('/getTimeAndWeather', function (req, res) {
   }
   openWeatherMap(zipCode)
   .then(googleTimeZone)
+  .then(googleElevation)
   .then((data) => {
-    console.log(data)
     res.status(200).json(data)
   })
   .catch((error) => {
-    console.log(error)
     res.status(500).send(error)
   })
 });
